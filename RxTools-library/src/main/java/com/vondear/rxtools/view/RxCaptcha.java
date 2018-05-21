@@ -47,13 +47,16 @@ public class RxCaptcha {
             'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
             'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
             'X', 'Y', 'Z'};
-
+    public static final char[] CHARS_CUSTOM = {'0', '1', '2', '3', '4', '5', '6',
+            '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+            'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
+            'X', 'Y', 'Z'};
     private static RxCaptcha rxCaptcha;
 
     private TYPE type = TYPE.CHARS;
 
-    public enum TYPE{
-        NUMBER,LETTER,CHARS
+    public enum TYPE {
+        NUMBER, LETTER, CHARS, CODECHAR
     }
 
     private RxCaptcha() {
@@ -100,7 +103,7 @@ public class RxCaptcha {
     private int font_size = DEFAULT_FONT_SIZE;
 
     // variables
-    private String code;// 保存生成的验证码
+    private String code, codeChar;// 保存生成的验证码
     private int padding_left, padding_top;
     private Random random = new Random();
 
@@ -119,6 +122,15 @@ public class RxCaptcha {
      */
     public RxCaptcha fontSize(int size) {
         font_size = size;
+        return rxCaptcha;
+    }
+
+    /**
+     * @param str 数字
+     * @return
+     */
+    public RxCaptcha codeChar(String str) {
+        codeChar = str;
         return rxCaptcha;
     }
 
@@ -181,7 +193,7 @@ public class RxCaptcha {
         return code.toLowerCase();
     }
 
-    public Bitmap into(ImageView imageView){
+    public Bitmap into(ImageView imageView) {
         Bitmap bitmap = createBitmap();
         if (imageView != null) {
             imageView.setImageBitmap(bitmap);
@@ -217,6 +229,9 @@ public class RxCaptcha {
                 for (int i = 0; i < codeLength; i++) {
                     buffer.append(CHARS_ALL[random.nextInt(CHARS_ALL.length)]);
                 }
+                break;
+            case CODECHAR:
+                buffer.append(codeChar);
                 break;
             default:
                 for (int i = 0; i < codeLength; i++) {
